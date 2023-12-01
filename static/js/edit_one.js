@@ -1,6 +1,6 @@
 function getOnlyDetail(id) {
     var request = new XMLHttpRequest();
-    request.open('GET', 'http://localhost:8000/dispositivos/' + encodeURIComponent(id));
+    request.open('GET', 'https://8000-gustavodelra-apidisback-4p3t9uybpfx.ws-us106.gitpod.io/dispositivos/' + encodeURIComponent(id));
     //request.open('GET', 'https://api-contactos-91f205878f2d.herokuapp.com/contactos/' + encodeURIComponent(id));
     request.send();
 
@@ -38,7 +38,7 @@ function editOne() {
 
     
     var request = new XMLHttpRequest();
-    request.open('PUT', 'http://localhost:8000/dispositivos/' + encodeURIComponent(id));
+    request.open('PUT', 'https://8000-gustavodelra-apidisback-4p3t9uybpfx.ws-us106.gitpod.io/dispositivos/' + encodeURIComponent(id));
     //request.open('PUT', 'https://api-contactos-91f205878f2d.herokuapp.com/dispositivos/' + encodeURIComponent(id));
     
     request.setRequestHeader('Content-Type', 'application/json');

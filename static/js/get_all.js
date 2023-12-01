@@ -1,6 +1,6 @@
 function getAll() {
     var request = new XMLHttpRequest();
-    request.open('GET', 'http://localhost:8000/dispositivos');
+    request.open('GET', 'https://8000-gustavodelra-apidisback-4p3t9uybpfx.ws-us106.gitpod.io/dispositivos');
     // request.open('GET', 'https://api-contactos-91f205878f2d.herokuapp.com/contactos');
     request.send();
 
@@ -60,7 +60,7 @@ function deleteOne(id) {
     if (confirmacion) {
         // Realizar una solicitud POST para eliminar el contacto
         var request = new XMLHttpRequest();
-        request.open('DELETE', 'http://localhost:8000/dispositivos/' + encodeURIComponent(id));
+        request.open('DELETE', 'https://8000-gustavodelra-apidisback-4p3t9uybpfx.ws-us106.gitpod.io/dispositivos/' + encodeURIComponent(id));
         //request.open('DELETE', 'https://api-contactos-91f205878f2d.herokuapp.com/contactos/' + encodeURIComponent(id));
         request.setRequestHeader('Content-Type', 'application/json');
         request.send();
