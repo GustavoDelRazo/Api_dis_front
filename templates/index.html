@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <title>Contactos</title>
+        <script type="text/javascript" src="/static/js/get_all.js"></script>
+    </head>
+
+    <body>
+        <div align="center">
+            <div>
+                <table border="1" id="table_dispositivos">
+                    <thead id="thead_dispositivos">
+                        <th>ID</th>
+                        <th>Dispositivo</th>
+                        <th>Valor</th>
+                        <th>Acciones</th>
+                    </thead>
+                    <tbody id="tbody_dispositivos">
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <a href="/buscar">Buscar</a>
+                <a href="/insertar">Insertar</a>
+            </div>
+        </div>
+        <script>
+            document.body.onload = getAll();
+        </script>
+    </body>
+</html>
