@@ -1,7 +1,6 @@
 function getAll() {
     var request = new XMLHttpRequest();
     request.open('GET', 'https://8000-gustavodelra-apidisback-4p3t9uybpfx.ws-us106.gitpod.io/dispositivos');
-    // request.open('GET', 'https://api-contactos-91f205878f2d.herokuapp.com/contactos');
     request.send();
 
     request.onload = (e) => {
