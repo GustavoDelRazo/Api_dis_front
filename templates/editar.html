@@ -1,28 +1,41 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Editar Dispositivo</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script type="text/javascript" src="/static/js/editar.js"></script>
 </head>
 <body>
-    <div class="container text-center">
-        <h1 class="my-4">Editar Dispositivo</h1>
-
-        <!-- Contenedor del botón de encendido y apagado -->
-        <div id="editar-container">
-            <button id="encenderButton" class="btn btn-success">Encender</button>
-            <button id="apagarButton" class="btn btn-danger">Apagar</button>
+    <div align="center">
+        
+        <div>
+            <form id="editarForm">
+                <div>
+                    <label for="id">ID:</label>
+                    <input type="number" id="id" name="id" readonly>
+                </div>
+                <div>
+                    <label for="dispositivo">Dispositivo:</label>
+                    <input type="text" id="dispositivo" name="dispositivo" readonly>
+                </div>
+                <div>
+                    <label for="Valor">Valor:</label>
+                    <input type="number" id="valor" name="valor">
+                </div>
+                
+                <button type="button" onclick="editOne()">Guardar Cambios</button>
+            </form>
+        </div>
+        <div>
+            <a href="javascript:history.back()">Volver</a>
         </div>
     </div>
-
-    <!-- Scripts y estilos de Bootstrap -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-    <!-- Script principal para editar dispositivos -->
-    <script src="../static/js/editar.js"></script>
+    <script>
+        document.body.onload = function () {
+            var params = new URLSearchParams(window.location.search);
+            var id = params.get("id");
+        
+            getOnlyDetail(id);
+        };
+    </script>
 </body>
 </html>
