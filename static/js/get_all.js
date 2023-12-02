@@ -1,91 +1,56 @@
-function getAll() {
-    var request = new XMLHttpRequest();
-    request.open('GET', 'https://8000-gustavodelra-apidisback-4p3t9uybpfx.ws-us106.gitpod.io/dispositivos');
-    request.send();
+document.addEventListener('DOMContentLoaded', function () {
+    obtenerDispositivos();
 
-    request.onload = (e) => {
-        if (request.status === 200) {
-            const response = request.responseText;
-            const contactos = JSON.parse(response);
-
-            const tbody_contactos = document.getElementById("tbody_dispositivos");
-            contactos.forEach((contacto) => {
-                var tr = document.createElement("tr");
-                var td_id = document.createElement("td");
-                var td_dispositivo = document.createElement("td");
-                var td_valor = document.createElement("td");
-                var td_acciones = document.createElement("td");
-
-                td_id.innerHTML = contacto.id;
-                td_dispositivo.innerHTML = contacto.dispositivo;
-                td_valor.innerHTML = contacto.valor;
-
-                // Enlaces de ver, editar y borrar
-                var verLink = document.createElement("a");
-                verLink.href = "/ver?id=" + encodeURIComponent(contacto.id);
-                verLink.innerText = "Ver ";
-
-                var editarLink = document.createElement("a");
-                editarLink.href = "/editar?id=" + encodeURIComponent(contacto.id);
-                editarLink.innerText = "Editar ";
-
-                /*
-                var borrarButton = document.createElement("button");
-                borrarButton.innerText = "Borrar";
-                borrarButton.addEventListener("click", function () {
-                    deleteOne(contacto.email);
-                });
-                */
-
-                td_acciones.appendChild(verLink);
-                td_acciones.appendChild(editarLink);
-                // td_acciones.appendChild(borrarButton);
-
-                tr.appendChild(td_id);
-                tr.appendChild(td_dispositivo);
-                tr.appendChild(td_valor);
-                tr.appendChild(td_acciones);
-
-                tbody_dispositivos.appendChild(tr);
-            });
-        } else {
-            console.log("Error al cargar los dispositivos.");
-        }
-    };
-}
-
-function deleteOne(id) {
-    var confirmacion = confirm("¿Está seguro de eliminar este dispositivo?");
-    if (confirmacion) {
-        // Realizar una solicitud POST para eliminar el contacto
+    function obtenerDispositivos() {
         var request = new XMLHttpRequest();
-        request.open('DELETE', 'https://8000-gustavodelra-apidisback-4p3t9uybpfx.ws-us106.gitpod.io/dispositivos/' + encodeURIComponent(id));
-        //request.open('DELETE', 'https://api-contactos-91f205878f2d.herokuapp.com/contactos/' + encodeURIComponent(id));
-        request.setRequestHeader('Content-Type', 'application/json');
+        request.open('GET', 'https://iot-backend-iylp.onrender.com/dispositivos');
         request.send();
 
-        request.onload = (e) => {
+        request.onload = function () {
             if (request.status === 200) {
-                console.log("Contacto eliminado correctamente");
-                // Actualizar la tabla eliminando la fila del contacto
-                deleteRow(id);
+                const dispositivos = JSON.parse(request.responseText);
+
+                // Obtener el elemento 'deviceList'
+                const dispositivoList = document.getElementById('deviceList');
+
+                // Verificar si el elemento existe antes de operar sobre él
+                if (dispositivoList) {
+                    // Limpiar la lista de dispositivos antes de actualizarla
+                    dispositivoList.innerHTML = '';
+
+                    dispositivos.forEach(dispositivo => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${dispositivo.id}</td>
+                            <td>${dispositivo.dispositivo}</td>
+                            <td>${dispositivo.valor}</td>
+                            <td>
+                                <button class="btn btn-success editar-button">Editar</button>
+                            </td>
+                        `;
+                        dispositivoList.appendChild(tr);
+
+                        // Asignar event listeners a los botones
+                        const editarButton = tr.querySelector('.editar-button');
+
+                        editarButton.addEventListener('click', function () {
+                            editarDispositivo(dispositivo.id);
+                        });
+                    });
+                } else {
+                    console.error('Elemento con ID "deviceList" no encontrado.');
+                }
             } else {
-                console.log("Error al eliminar el dispositivo.");
+                console.error('Error al obtener dispositivos. Código de estado:', request.status);
             }
         };
-    }
-}
 
-function deleteRow(email) {
-    var tbody_contactos = document.getElementById("tbody_contactos");
-    var filas = tbody_contactos.getElementsByTagName("tr");
-    
-    // Buscar la fila que contiene el contacto con el email especificado y eliminarla
-    for (var i = 0; i < filas.length; i++) {
-        var celdas = filas[i].getElementsByTagName("td");
-        if (celdas.length > 0 && celdas[0].innerHTML === email) {
-            tbody_contactos.removeChild(filas[i]);
-            break;
-        }
+        request.onerror = function () {
+            console.error('Error de red al intentar obtener dispositivos.');
+        };
     }
-}
+
+    function editarDispositivo(id) {
+        window.location.href = `editar?id=${id}`;
+    }
+});
