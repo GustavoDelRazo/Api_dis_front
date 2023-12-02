@@ -1,61 +1,41 @@
-function getOnlyDetail(id) {
-    var request = new XMLHttpRequest();
-    request.open('GET', 'https://8000-gustavodelra-apidisback-4p3t9uybpfx.ws-us106.gitpod.io/' + encodeURIComponent(id));
-    //request.open('GET', 'https://api-contactos-91f205878f2d.herokuapp.com/contactos/' + encodeURIComponent(id));
-    request.send();
+document.addEventListener('DOMContentLoaded', function () {
+    // Obtener el ID del dispositivo de la URL (asumimos que está en formato "?id=123")
+    const urlParams = new URLSearchParams(window.location.search);
+    const dispositivoId = urlParams.get('id');
 
-    request.onload = (e) => {
-        if (request.status === 200) {
-            const response = request.responseText;
-            const dispositivo = JSON.parse(response);
+    // Obtener los botones de encendido y apagado
+    const encenderButton = document.getElementById('encenderButton');
+    const apagarButton = document.getElementById('apagarButton');
 
-            
-            showDetails(dispositivo);
-        } else {
-            console.log("Error al obtener detalles del dispositivo.");
-        }
-    };
-}
+    // Asignar event listeners a los botones
+    encenderButton.addEventListener('click', function () {
+        editarValorDispositivo(dispositivoId, 1);
+    });
 
-function showDetails(dispositivo) {
-    // Actualiza el párrafo con el email actual
-    document.getElementById("id").value = dispositivo.id;
+    apagarButton.addEventListener('click', function () {
+        editarValorDispositivo(dispositivoId, 0);
+    });
 
-    // Rellena los campos del formulario con la información del contacto
-    document.getElementById("dispositivo").value = dispositivo.dispositivo;
-    document.getElementById("valor").value = dispositivo.valor;
-}
+    function editarValorDispositivo(id, nuevoValor) {
+        const request = new XMLHttpRequest();
+        request.open('PUT', `https://8080-gustavodelr-apidisfront-norcv9c6ear.ws-us106.gitpod.io/dispositivos/${id}`);
+        request.setRequestHeader('Content-Type', 'application/json');
 
-function editOne() {
+        // Utilizar un objeto para enviar el nuevo valor en el cuerpo de la solicitud
+        const nuevoValorData = { valor: nuevoValor };
 
-    var id = document.getElementById("id").value
-    var valor = document.getElementById("valor").value;
+        request.send(JSON.stringify(nuevoValorData));
 
-    
-    var datos = {
-        valor: valor
-    };
+        request.onload = function () {
+            if (request.status === 200) {
+                alert('Valor actualizado correctamente');
+            } else {
+                console.error('Error al actualizar el valor. Código de estado:', request.status);
+            }
+        };
 
-    
-    var request = new XMLHttpRequest();
-    request.open('PUT', 'https://8000-gustavodelra-apidisback-4p3t9uybpfx.ws-us106.gitpod.io/dispositivos/' + encodeURIComponent(id));
-    //request.open('PUT', 'https://api-contactos-91f205878f2d.herokuapp.com/dispositivos/' + encodeURIComponent(id));
-    
-    request.setRequestHeader('Content-Type', 'application/json');
-    request.send(JSON.stringify(datos));
-
-    request.onload = (e) => {
-        if (request.status === 200) {
-            console.log("Dispositivo editado correctamente");
-            
-            alert("Dispositivo editado correctamente");
-            window.location.href = "/";
-        } else if (request.status === 500) {
-            console.log("Error: no se que putas paso");
-            
-            alert("Error: no se que putas paso");
-        } else {
-            console.log("nuh uh dumbass");
-        }
-    };
-}
+        request.onerror = function () {
+            console.error('Error de red al intentar actualizar el valor.');
+        };
+    }
+});
